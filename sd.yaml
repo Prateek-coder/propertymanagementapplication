@@ -2,34 +2,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: propertymanagement-prod
-  labels:
-       app: PropertyManagementSystem2
+  name: wordpress-deployment
 spec:
   replicas: 1
-  template:
-    metadata:
-      name: myapp-pod
-      labels:
-        app: propertymanagementapplication
-    spec:
-      containers:
-        - name: propertymanagementapplication
-          image: pratikmeti/propertymanagementapplication
   selector:
     matchLabels:
-      app: PropertyManagementSystem2
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: pratikmeti/propertymanagementapplication
+        ports:
+        - name: http-port
+          containerPort: 8080
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: managementservice
+  name: wordpress-servicedb
 spec:
-  type : NodePort>
   ports:
-    - port: 8080
-      targetPort: 8080
-      nodePort: 30003
+  - port: 8080
+    nodePort: 32004
+    targetPort: http-port
+    protocol: TCP
   selector:
-    app: PropertyManagementSystem2 
+    app: wordpress
+  type: NodePort
