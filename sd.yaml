@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: propertymanagementapplication-prod
+  labels:
+       app: propertymanagementapplication
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: myapp-pod
+      labels:
+        app: propertymanagementapplication
+    spec:
+      containers:
+        - name: propertymanagementapplication
+          image: pratikmeti/propertymanagementapplication
+  selector:
+    matchLabels:
+      app: propertymanagementapplication
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: propertyservice
+spec:
+  type : NodePort>
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30003
+  selector:
+    app: propertymanagementapplication
